@@ -15,12 +15,16 @@ export const Content = styled.div`
 
   :last-child {
     background: var(--green);
-    color: #fff;
+    color: var(--shape);
+
+    strong {
+      color: var(--text-title);
+    }
   }
 
   strong {
     display: block;
-    color: var(--text-title);
+    color: var(--title);
     font-size: 2rem;
     line-height: 3rem;
     margin-top: 1rem;
