@@ -18,7 +18,7 @@ export const Content = styled.div`
     color: var(--shape);
 
     strong {
-      color: var(--text-title);
+      color: var(--shape);
     }
   }
 
