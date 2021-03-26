@@ -1,13 +1,32 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import totalImg from '../../assets/total.svg';
-import { TransactionsContext } from '../../TransactionsContext';
+import { useTransactions } from '../../hooks/useTransactions';
 
 import { Container, Content, Header } from './styles';
 
 const Summary: React.FC = () => {
-  const data = useContext(TransactionsContext);
+  const { transactions } = useTransactions();
+
+  const summary = transactions.reduce(
+    (acc, transaction) => {
+      if (transaction.type === 'deposit') {
+        acc.deposits += transaction.amount;
+        acc.total += transaction.amount;
+      } else {
+        acc.withdraws += transaction.amount;
+        acc.total -= transaction.amount;
+      }
+      return acc;
+    },
+    {
+      deposits: 0,
+      withdraws: 0,
+      total: 0,
+    },
+  );
+
   return (
     <Container>
       <Content>
@@ -15,21 +34,37 @@ const Summary: React.FC = () => {
           <p>Entradas</p>
           <img src={incomeImg} alt="Entradas" />
         </Header>
-        <strong>R$1000,00</strong>
+        <strong>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(summary.deposits)}
+        </strong>
       </Content>
       <Content>
         <Header>
           <p>Saídas</p>
           <img src={outcomeImg} alt="Saídas" />
         </Header>
-        <strong>- R$500,00</strong>
+        <strong>
+          -
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(summary.withdraws)}
+        </strong>
       </Content>
       <Content>
         <Header>
           <p>Total</p>
           <img src={totalImg} alt="Total" />
         </Header>
-        <strong>R$500,00</strong>
+        <strong>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(summary.total)}
+        </strong>
       </Content>
     </Container>
   );
